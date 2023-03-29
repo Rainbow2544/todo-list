@@ -1,0 +1,14 @@
+.Container{
+    width: 100%;
+    background-color: #72a6eb;
+    height:6.5vh;
+}
+ul{
+    list-style: none;
+    display: flex; 
+}
+li{
+    margin: 10px 30px;
+    cursor: pointer;
+    color: #616161;
+}
