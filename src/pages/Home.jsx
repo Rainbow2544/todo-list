@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -17,7 +18,8 @@ const DescriptionContainer = styled.div`
 `
 
 const DescriptionInput = styled.input`
-  width: 50%;
+  min-width: 50%;
+  
 `
 
 const CategoryContainer = styled.div`
@@ -29,7 +31,7 @@ const Category = styled.p`
   margin-right: 13px;
 `
 const CategorySelect = styled.select`
-  width: 15%;
+  min-width: 15%;
 `
 
 const CategoryOption = styled.option``
@@ -44,7 +46,7 @@ const Content = styled.p`
 
 
 const ContentTextarea = styled.textarea`
-  width: 60%;
+  min-width: 60%;
 `
 const FormButtonArea = styled.div`
   margin-top: 30px;
@@ -83,28 +85,74 @@ const Td = styled.td``
 
 
 function Home() {
+  const [formData, setFormData] = useState({
+    description:"",
+    category:"",
+    content:""
+  });
+
+  const {
+    description,
+    category,
+    content,
+  } = formData;
+ 
+  function handleChange(event){
+    let updatedValue = event.target.value;
+  
+    setFormData((preState)=>({
+      ...preState,
+      [event.target.id]: updatedValue
+  }));
+  }
+
+  function handleSubmit(event){
+    event.preventDefault();
+    console.log("event.target.value",formData);
+    
+  }
   return (
     <Container>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <DescriptionContainer>
-          <Description>Description :</Description>
-          <DescriptionInput></DescriptionInput>
+          <Description>Description:</Description>
+          <DescriptionInput 
+            type="text"
+            id="description"
+            value={description}
+            onChange={handleChange}
+            required
+          />
+          
         </DescriptionContainer>
-        
+
         <CategoryContainer>
-          <Category>Category :</Category>
-          <CategorySelect>
+          <Category>Category:</Category>
+          <CategorySelect
+            
+            id="category"
+            value={category}
+            onChange={handleChange}
+            required
+          >
             <CategoryOption></CategoryOption>
             <CategoryOption>CSS</CategoryOption>
           </CategorySelect>
         </CategoryContainer>
 
         <ContentContainer>
-            <Content>Content :</Content>
-            <ContentTextarea />
+            <Content>Content:</Content>
+            <ContentTextarea 
+              type="text"
+              id="content"
+              value={content}
+              onChange={handleChange}
+              required
+            />
         </ContentContainer>
         <FormButtonArea>
-          <Button>Submit</Button>
+          <Button onSubmit={handleSubmit} 
+          >Submit</Button>
         </FormButtonArea>
         
       </Form>
@@ -115,7 +163,7 @@ function Home() {
             <Checkbox type="checkbox"></Checkbox>
             <Th>Description</Th>
             <Th>Category</Th>
-            <Th>Content</Th>
+            <Th>Operate</Th>
           </Row>
           <Row>
             <Checkbox type="checkbox"></Checkbox>
