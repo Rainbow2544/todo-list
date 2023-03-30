@@ -1,90 +1,11 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-
-const Container = styled.div`
-  display: flex;
-  margin-top: 50px;
-`
-const Form = styled.form`
-  flex: 1;
-  height: 50px;
-  margin-left: 40px;
-`
-
-const Description = styled.p``
-
-const DescriptionContainer = styled.div`
-  display: flex;
-`
-
-const DescriptionInput = styled.input`
-  min-width: 50%;
-  
-`
-
-const CategoryContainer = styled.div`
-  display: flex;
-  margin-top: 20px;
-`
-
-const Category = styled.p`
-  margin-right: 13px;
-`
-const CategorySelect = styled.select`
-  min-width: 15%;
-`
-
-const CategoryOption = styled.option``
-
-const ContentContainer = styled.div`
-  display: flex;
-  margin-top: 20px;
-`
-const Content = styled.p`
-  margin-right: 23px;
-`
-
-
-const ContentTextarea = styled.textarea`
-  min-width: 60%;
-`
-const FormButtonArea = styled.div`
-  margin-top: 30px;
-  margin-left: -20px;
-`
-
-const Button = styled.button`
-  background: #0099ff;
-  color: white;
-  padding: 5px;
-  cursor: pointer;
-  &:hover{
-    color: gray;
-  }
-`
-
-const TableContainer = styled.div`
-  flex: 3;
-`
-const Table = styled.table`
-  margin-top: 20px;
-  width:60%;
-  border: 1px solid;
-`
-const Row = styled.tr`
-  display: flex;
-  justify-content: space-around;
-`
-
-const Checkbox = styled.input``
-
-const Th = styled.th``
-
-const Td = styled.td``
-
-
+import TodoContainer from "../components/TodoContainer";
+import "./Home.css";
+import { getTodoList, saveTodoList } from '../SessionStorage';
 
 function Home() {
+  const [todoList, setTodoList] = useState([]);
+
   const [formData, setFormData] = useState({
     description:"",
     category:"",
@@ -96,6 +17,12 @@ function Home() {
     category,
     content,
   } = formData;
+
+  useEffect(() =>{
+    const todos = getTodoList();
+    setTodoList(todos);
+  },[]);
+ 
  
   function handleChange(event){
     let updatedValue = event.target.value;
@@ -106,17 +33,35 @@ function Home() {
   }));
   }
 
+  function addTodo(){
+    setTodoList([...todoList,formData]);
+    saveTodoList([...todoList,formData]);
+  }
+
+  function removeTodo(index){
+    const newTodoList = [...todoList];
+    newTodoList.splice(index, 1);
+    setTodoList(newTodoList);
+    saveTodoList(newTodoList);
+  }
+
+  function removeSelectTodos(index){
+    setTodoList([]);
+  }
+
   function handleSubmit(event){
     event.preventDefault();
-    console.log("event.target.value",formData);
+    addTodo();
+    console.log("new",todoList);
     
   }
+  
   return (
-    <Container>
-      <Form onSubmit={handleSubmit}>
-        <DescriptionContainer>
-          <Description>Description:</Description>
-          <DescriptionInput 
+    <div className="container">
+      <form id="todoForm" onSubmit={handleSubmit}>
+        <div id="desContainer">
+          <p>Description:</p>
+          <input  
             type="text"
             id="description"
             value={description}
@@ -124,59 +69,70 @@ function Home() {
             required
           />
           
-        </DescriptionContainer>
+        </div>
 
-        <CategoryContainer>
-          <Category>Category:</Category>
-          <CategorySelect
+        <div id="categoryContainer">
+          <p id="categoryText">Category:</p>
+          <select
             
             id="category"
             value={category}
             onChange={handleChange}
             required
           >
-            <CategoryOption></CategoryOption>
-            <CategoryOption>CSS</CategoryOption>
-          </CategorySelect>
-        </CategoryContainer>
+            <option></option>
+            <option>css</option>
+          </select>
+        </div>
 
-        <ContentContainer>
-            <Content>Content:</Content>
-            <ContentTextarea 
+        <div id="contentContainer">
+            <p id="contentText">Content:</p>
+            <textarea 
               type="text"
               id="content"
               value={content}
               onChange={handleChange}
               required
             />
-        </ContentContainer>
-        <FormButtonArea>
-          <Button onSubmit={handleSubmit} 
-          >Submit</Button>
-        </FormButtonArea>
+        </div>
+        <div id="formButtonArea">
+          <button className="btn" onSubmit={handleSubmit} 
+          >Submit</button>
+        </div>
         
-      </Form>
-      <TableContainer>
-        <Button>Delete Selected</Button>
-        <Table>
-          <Row>
-            <Checkbox type="checkbox"></Checkbox>
-            <Th>Description</Th>
-            <Th>Category</Th>
-            <Th>Operate</Th>
-          </Row>
-          <Row>
-            <Checkbox type="checkbox"></Checkbox>
-            <Td>Description</Td>
-            <Td>Category</Td>
-            <Td>Content</Td>
-          </Row>
-        </Table>
-
-      </TableContainer>
+      </form>
+      <div id="tableContainer">
+        <button className="btn"
+          onClick={() => removeSelectTodos()} 
+        >Delete Selected</button>
+        <table>
+          <tr>
+            <input 
+            type="checkbox" 
+            disabled
+            />
+            <th>Description</th>
+            <th>Category</th>
+            <th>Operate</th>
+          </tr>
+          
+            {todoList.map((todo,index)=>(
+                <TodoContainer 
+                  todo={todo}
+                  index={index}
+                  removeTodo={removeTodo}
+                /> 
+            ))}
+            
+          
         
-    </Container>
+        </table>
+        
+      </div>
+      
+    </div>
   )
 }
 
 export default Home;
+

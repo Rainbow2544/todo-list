@@ -9,7 +9,7 @@ function NavBar() {
  
 
   function checkPathMatchRoute(route){
-    if(route === location.pathname){
+    if(location.pathname.includes(route)){
       return "black";
     }
     return "#616161";
@@ -19,8 +19,8 @@ function NavBar() {
   return (
     <div className='Container'>
         <ul>
-          <li onClick={()=>navigate("/")}
-            style={{color:`${checkPathMatchRoute("/")}`}}
+          <li onClick={()=>navigate("/todo")}
+            style={{color:`${checkPathMatchRoute("/todo")}`}}
             
           >todo</li>
           <li onClick={()=>navigate("/about")}

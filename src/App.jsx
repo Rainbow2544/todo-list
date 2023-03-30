@@ -11,9 +11,9 @@ function App() {
       <Router>
         <NavBar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/todo" element={<Home />} />
           <Route path='/about' element={<About/>} />
-          <Route path="/{:todoId}" element={<TodoDetail />} />
+          <Route path="/todo/:todoId" element={<TodoDetail />} />
         </Routes>
       </Router>
     </>
