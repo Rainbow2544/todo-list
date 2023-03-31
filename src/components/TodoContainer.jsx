@@ -1,23 +1,18 @@
+import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Row = styled.tr`
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
+    min-height: 40px;
     background: ${(props)=> 
       props.index % 2 === 0 && "yellow"
       };
-
 `
 
 const Checkbox = styled.input`
-  margin: 0px 20px;
+  margin-top: 10px; 
 `
-const Td = styled.td`
-  
-  margin: 0px 30px;
-`
+const Td = styled.td``
 
 const DeleteButton = styled.button`
   border: none;
@@ -25,15 +20,28 @@ const DeleteButton = styled.button`
   font-size: 17px;
   color: red;
   background: none;
+  margin-top: 10px; 
 `
 
-function TodoContainer({ todo, index, removeTodo}) {
+function TodoContainer({ todo, index, removeTodo,selectedCheckboxes,setSelectedCheckboxes}) {
   const navigate = useNavigate();
-  console.log("you",index,index % 2);
+  console.log("container",selectedCheckboxes);
+  
+  
   return (
- 
     <Row key={index} index={index}>
-      <Checkbox type="checkbox"/>
+      <Td>
+        <Checkbox type="checkbox"
+          checked={selectedCheckboxes[index] || false}
+          onChange={(event) => {
+            const isChecked = event.target.checked;
+            setSelectedCheckboxes((prevState) => ({
+              ...prevState,
+              [index]: isChecked,
+            }));
+          }}
+        />
+      </Td>
       <Td
         onClick={() => navigate(`/todo/${index}`)}
       >{todo.description}</Td>

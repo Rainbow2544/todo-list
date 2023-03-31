@@ -57,10 +57,21 @@ input #description{
 table{
     margin-top: 20px;
     width:60%;
-    border: 1px solid;
+    border: 3px solid;
+    
 }
-tr{
-    display: flex;
-    justify-content: space-around;
+
+th,td,tr{
+    width: 150px;
     text-align: center;
+    align-items: center;
+    height: 40px;
+    
+}
+
+.selectedCheckBox{
+    margin-top: 10px;
+}
+#headerRow{
+    background: #a5a55c;
 }
