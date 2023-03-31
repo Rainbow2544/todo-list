@@ -4,7 +4,8 @@ import "./Home.css";
 import { getTodoList, saveTodoList } from '../SessionStorage';
 
 function Home() {
-  const [todoList, setTodoList] = useState([]);
+  const todosFromLocal = getTodoList();
+  const [todoList, setTodoList] = useState(todosFromLocal);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState({});
   
 
@@ -23,14 +24,16 @@ function Home() {
   useEffect(() =>{
     const todos = getTodoList();
     setTodoList(todos);
-
-    
-    const newSelectedCheckboxes = {};
-    todos.forEach((todo, index) =>{
-        newSelectedCheckboxes[index] = false;
-      })
-    setSelectedCheckboxes(newSelectedCheckboxes);
+    updatedSelectedCheckboxes()
   },[]);
+
+  function updatedSelectedCheckboxes(){
+    const newSelectedCheckboxes = {};
+    todoList.forEach((todo, index) => {
+      newSelectedCheckboxes[index] = false;
+    });
+    setSelectedCheckboxes(newSelectedCheckboxes);
+  }
  
  
   function handleChange(event){
@@ -47,6 +50,7 @@ function Home() {
     newTodoList.splice(index, 1);
     setTodoList(newTodoList);
     saveTodoList(newTodoList);
+    updatedSelectedCheckboxes()
   }
 
   function selectedAllChangeHandle(event){
@@ -59,26 +63,22 @@ function Home() {
   }
 
   function removeSelectTodos(){
-    let todoKeepArr = [];
-    const newSelectedCheckboxes = {};
-    todoList.forEach((todo, index) =>{
-    if(selectedCheckboxes[index] === false){
-      todoKeepArr = [...todoKeepArr, todo]
-    } 
-    })
+    const todoKeepArr = todoList.filter((todo, index) => {
+      return !selectedCheckboxes[index];
+    });
     setTodoList(todoKeepArr);
     saveTodoList(todoKeepArr);
-
-    todoList.forEach((todo, index) => {
-      newSelectedCheckboxes[index] = false;
-    });
-    setSelectedCheckboxes(newSelectedCheckboxes);
+    updatedSelectedCheckboxes();
   }
 
   function handleSubmit(event){
+    event.preventDefault();
     //add todo
-    setTodoList([...todoList,formData]);
-    saveTodoList([...todoList,formData]);
+    const newTodoList = [...todoList, formData];
+    setTodoList(newTodoList);
+    saveTodoList(newTodoList);
+    updatedSelectedCheckboxes();
+    
   }
   
   return (
@@ -126,7 +126,7 @@ function Home() {
 
       <div id="tableContainer">
         <button className="btn"
-          onClick={() => removeSelectTodos()} 
+          onClick={removeSelectTodos} 
         >Delete Selected</button>
         <table cellSpacing="0" cellPadding="0">
           <tr id="headerRow">
