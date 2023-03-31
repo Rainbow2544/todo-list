@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Row = styled.tr`
@@ -25,8 +24,6 @@ const DeleteButton = styled.button`
 
 function TodoContainer({ todo, index, removeTodo,selectedCheckboxes,setSelectedCheckboxes}) {
   const navigate = useNavigate();
-  console.log("container",selectedCheckboxes);
-  
   
   return (
     <Row key={index} index={index}>

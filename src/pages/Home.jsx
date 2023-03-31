@@ -23,6 +23,13 @@ function Home() {
   useEffect(() =>{
     const todos = getTodoList();
     setTodoList(todos);
+
+    
+    const newSelectedCheckboxes = {};
+    todos.forEach((todo, index) =>{
+        newSelectedCheckboxes[index] = false;
+      })
+    setSelectedCheckboxes(newSelectedCheckboxes);
   },[]);
  
  
@@ -34,12 +41,6 @@ function Home() {
       [event.target.id]: updatedValue
   }));
   }
-
-  function addTodo(){
-    setTodoList([...todoList,formData]);
-    saveTodoList([...todoList,formData]);
-  }
-  
  
   function removeTodo(index){
     const newTodoList = [...todoList];
@@ -66,6 +67,7 @@ function Home() {
     } 
     })
     setTodoList(todoKeepArr);
+    saveTodoList(todoKeepArr);
 
     todoList.forEach((todo, index) => {
       newSelectedCheckboxes[index] = false;
@@ -74,8 +76,9 @@ function Home() {
   }
 
   function handleSubmit(event){
-    event.preventDefault();
-    addTodo();
+    //add todo
+    setTodoList([...todoList,formData]);
+    saveTodoList([...todoList,formData]);
   }
   
   return (
@@ -125,7 +128,7 @@ function Home() {
         <button className="btn"
           onClick={() => removeSelectTodos()} 
         >Delete Selected</button>
-        <table cellspacing="0" cellpadding="0">
+        <table cellSpacing="0" cellPadding="0">
           <tr id="headerRow">
             <th>
               <input 
@@ -134,7 +137,6 @@ function Home() {
                 onChange={selectedAllChangeHandle}
               />
             </th>
-            
             <th>Description</th>
             <th>Category</th>
             <th>Operate</th>
