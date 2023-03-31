@@ -19,7 +19,6 @@ const DeleteButton = styled.button`
   font-size: 17px;
   color: red;
   background: none;
-  margin-top: 10px; 
 `
 
 function TodoContainer({ todo, index, removeTodo,selectedCheckboxes,setSelectedCheckboxes}) {
@@ -45,9 +44,12 @@ function TodoContainer({ todo, index, removeTodo,selectedCheckboxes,setSelectedC
       <Td
         onClick={() => navigate(`/todo/${index}`)}
       >{todo.category}</Td>
-      <DeleteButton
-        onClick={() => removeTodo(index)}
-      >Delete</DeleteButton>
+      <Td>
+        <DeleteButton
+          onClick={() => removeTodo(index)}
+        >Delete</DeleteButton>
+      </Td>
+      
     </Row>  
   )
 }
